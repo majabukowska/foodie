@@ -4,9 +4,9 @@
 <br />
 <div align="center">
   <h3 align="center">Pet2Care</h3>
-  <a href="https://github.com/majabukowska/pet_care_app">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+    <a href="https://github.com/majabukowska/pet_care_app">
+      <img src="/images/logo.png" alt="Logo" width="256" height="256">
+    </a>s
   <p align="center">
     Pet Care iOS application
     <br />

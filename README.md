@@ -3,12 +3,12 @@
 
 <br />
 <div align="center">
-  <h3 align="center">Pet2Care</h3>
+  <h3 align="center">FitConnect</h3>
     <a href="https://github.com/majabukowska/pet_care_app">
-      <img src="/images/logo.png" alt="Logo" width="256" height="256">
-    </a>s
+      <img src="/images/logoFitConnect.png" alt="Logo" width="256" height="256">
+    </a>
   <p align="center">
-    Pet Care iOS application
+    Fitness iOS application
     <br />
     <a href="https://github.com/majabukowska/pet_care_app"><strong>Explore the docs »</strong></a>
     <br />

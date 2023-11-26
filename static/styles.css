@@ -1,8 +1,54 @@
 body {
-    background-color: black;
-    font-family: Arial, sans-serif;
+    background-color: #EDDEA4;
+    font-family:'Quicksand', sans-serif;
+    
+}
+nav.navbar {
+    background-color: #745296;
+    color: #E8AEB7;
 }
 
-h1 {
-    color: #333;
+.signInForm {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 400px;
+    margin: auto;
+    
+}
+h1{
+    color: #0A2463;
+    margin-top: 40px;
+}
+
+h3{
+    color: #0A2463;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+#emailHelp {
+    color: #0A2463;
+
+}
+.form-text a{
+    color: #0A2463;
+
+}
+.form-text a:hover,
+.form-text a:active {
+    color: #97D2FB;
+}
+button.btn {
+    background-color: #0A2463;
+    border: 1px solid #0A2463;
+}
+
+button.btn:hover,
+button.btn:active {
+    background-color: #97D2FB !important;
+    border: 1px solid #97D2FB !important;
+    box-shadow: 0 0 2px 3px white !important;
 }

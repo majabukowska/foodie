@@ -1,0 +1,35 @@
+{% extends "base.html" %} {% block content %}
+<nav class="navbar">
+  <span class="navbar-brand mb-0 h1">foodie</span>
+</nav>
+
+<form class="signUpForm" method="post" action="{{ url_for('login') }}">
+  <h1>welcome to foodie</h1>
+  <h3>please sign in to continue:</h3>
+  <div class="form-group">
+    <input
+      type="email"
+      class="form-control"
+      name="email"
+      aria-describedby="emailHelp"
+      value="{{ request.form.email}}"
+      placeholder="enter email"
+      required
+    />
+  </div>
+  <div class="form-group">
+    <input
+      type="password"
+      class="form-control"
+      name="password"
+      value="{{ request.form.password}}"
+      placeholder="enter password"
+      required
+    />
+  </div>
+  <button type="submit" class="btn btn-primary">log in</button>
+  <small id="emailHelp" class="form-text">
+    new on foodie? <a href="/signup">sign up here</a>
+  </small>
+</form>
+{% endblock %}

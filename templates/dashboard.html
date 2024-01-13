@@ -1,14 +1,211 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+  .container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .card-title {
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: left;
+    font-size: 1.5rem;
+  }
+  .title {
+    color: #333;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  .btn-group {
+    display: flex;
+    justify-content: space-between;
+  }
+  .btn-group .btn {
+    flex: 1;
+    margin: 0 0.5rem;
+    border-radius: 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+  }
+  .btn:not(:last-child) {
+    margin-right: 10px;
+  }
+  .btn.active, .btn:active {
+  background-color: #0056b3;
+  color: white;
+}
+
+  .form-check-input {
+    margin-right: 0.5rem;
+  }
+  .form-check-label {
+    margin-right: 2rem;
+  }
+  .btn-success {
+    background-color: #28a745;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    color: white;
+  }
+  .form-control {
+    border-radius: 20px;
+    padding: 1rem;
+  }
+  .form-check {
+    margin-bottom: 0.5rem;
+  }
+  .btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px white;
+}
+
+</style>
+
 <nav class="navbar">
   <span class="navbar-brand mb-0 h1">foodie</span>
   <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
 </nav>
 
 <div class="container">
-  <h1>dashboard</h1>
-  <p>hello, {{ name }}! you are logged in.</p>
-  
+  <h5 class="card-title">choose params</h5>
+  <div class="mb-3">
+    <input type="text" class="form-control" placeholder="Type your ingredients">
+  </div>
+
+  <p class="title">days</p>
+  <div class="btn-group mb-3" role="group">
+
+            <button type="button" class="btn btn-outline-secondary days-btn" value="1d">1 day</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="2d">2 days</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="3d">3 days</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="4d">4 days</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="5d">5 days</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="6d">6 days</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="7d">7 days</button>
+          </div>
+          
+          <p class="title">meals</p>
+          <div class="btn-group mb-3" role="group">
+            <button type="button" class="btn btn-outline-secondary meals-btn" value="3m">3 meals</button>
+            <button type="button" class="btn btn-outline-secondary meals-btn" value="4m">4 meals</button>
+            <button type="button" class="btn btn-outline-secondary meals-btn" value="5m">5 meals</button>
+          </div>
+          
+          <p class="title">calories</p>
+          <div class="btn-group mb-3" role="group">
+            <button type="button" class="btn btn-outline-secondary calories-btn" value="1600">1600</button>
+            <button type="button" class="btn btn-outline-secondary calories-btn" value="1800">1800</button>
+            <button type="button" class="btn btn-outline-secondary calories-btn" value="2000">2000</button>
+            <button type="button" class="btn btn-outline-secondary calories-btn" value="2400">2400</button>
+            <button type="button" class="btn btn-outline-secondary calories-btn" value="2800">2800</button>
+            <button type="button" class="btn btn-outline-secondary calories-btn" value="3200">3200</button>
+            <button type="button" class="btn btn-outline-secondary calories-btn" value="3400">3400</button>
+          </div>
+          
+          <p class="title">dietary requirements</p>
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="vegetarian" id="vegetarian">
+              <label class="form-check-label" for="vegetarian">vegetarian</label>
+              <input class="form-check-input" type="checkbox" value="vegan" id="vegan">
+              <label class="form-check-label" for="vegan">vegan</label>
+              <input class="form-check-input" type="checkbox" value="gluten-free" id="gluten-free">
+              <label class="form-check-label" for="gluten-free">gluten-free</label>
+              <input class="form-check-input" type="checkbox" value="dairy-free" id="dairy-free">
+              <label class="form-check-label" for="dairy-free">dairy-free</label>
+            </div>
+            
+          </div>
+          
+          <button type="button" class="btn btn-success">generate</button>
+          
+        </div>
+        <div id="diet-plan"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      function setupButtonGroup(groupSelector) {
+        let buttons = document.querySelectorAll(groupSelector);
+        buttons.forEach(btn => {
+          btn.addEventListener('click', function() {
+            buttons.forEach(b => b.classList.remove('active', 'btn-secondary'));
+            buttons.forEach(b => b.classList.add('btn-outline-secondary'));
+            this.classList.add('active', 'btn-secondary');
+            this.classList.remove('btn-outline-secondary');
+          });
+        });
+      }
+    
+      setupButtonGroup('.days-btn');
+      setupButtonGroup('.meals-btn');
+      setupButtonGroup('.calories-btn');
+    
+      document.querySelector('.btn-success').addEventListener('click', function() {
+        let ingredients = document.querySelector('.form-control').value;
+        let selectedDay = document.querySelector('.days-btn.active')?.value || '';
+        let selectedMeal = document.querySelector('.meals-btn.active')?.value || '';
+        let selectedCalories = document.querySelector('.calories-btn.active')?.value || '';
+        let dietaryRequirements = Array.from(document.querySelectorAll('.form-check-input:checked')).map(el => el.value);
+        fetch('/generate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ingredients: ingredients, 
+            day: selectedDay,
+            meal: selectedMeal,
+            calories: selectedCalories,
+            dietary: dietaryRequirements,
+          }),
+        })
+        .then(response => response.json())
+        .then(data => {
+      data.diet_plan.forEach(jsonString => {
+        let dayPlan = JSON.parse(jsonString);
+        let dietPlanHtml = '';
+
+        for (let mealKey in dayPlan.day) {
+          let meal = dayPlan.day[mealKey];
+          dietPlanHtml += `<h3>${meal.title}</h3>`;
+          dietPlanHtml += `<p><strong>Calories:</strong> ${meal.calories}</p>`;
+          dietPlanHtml += '<h4>Ingredients:</h4><ul>';
+
+          for (let ingredientKey in meal.ingredients) {
+            dietPlanHtml += `<li>${ingredientKey}: ${meal.ingredients[ingredientKey]}</li>`;
+          }
+
+          dietPlanHtml += '</ul>';
+          dietPlanHtml += `<p><strong>Preparation:</strong> ${meal.preparation}</p>`;
+          dietPlanHtml += '<h4>Macros:</h4><ul>';
+
+          for (let macroKey in meal.macros) {
+            dietPlanHtml += `<li>${macroKey}: ${meal.macros[macroKey]}</li>`;
+          }
+
+          dietPlanHtml += '</ul>';
+        }
+
+        let dietDiv = document.getElementById('diet-plan');
+        dietDiv.innerHTML += dietPlanHtml;
+      });
+    });
+  });
+      });
+    
+    </script>
+    
+    
 </div>
 {% endblock %}

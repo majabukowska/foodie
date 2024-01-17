@@ -5,12 +5,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from openai import OpenAI
 import json
-from config import OPENAI_API_KEY
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'foodie'
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(
+    api_key=os.environ.get("OPENAI_API_KEY"),
+)
 DATABASE = 'database.db'
 
 

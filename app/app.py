@@ -75,17 +75,15 @@ def login():
         password = request.form['password']
 
         db = get_db()
-        user = db.execute(
-            'SELECT * FROM user WHERE email = ?', (email,)).fetchone()
+        user = db.execute('SELECT * FROM user WHERE email = ?', (email,)).fetchone()
 
         if user is None or not check_password_hash(user['password'], password):
             flash('Sprawdź swoje dane logowania i spróbuj ponownie.')
             return redirect(url_for('login'))
 
-        user_obj = User(id=user['id'], name=user['name'],
-                        email=user['email'], password=user['password'])
+        user_obj = User(id=user['id'], name=user['name'], email=user['email'], password=user['password'])
         login_user(user_obj)
-        return redirect(url_for('account'))
+        return redirect(url_for('dashboard'))
 
     return render_template('login.html')
 
@@ -98,8 +96,7 @@ def signup():
         password = request.form['password']
 
         db = get_db()
-        user = db.execute(
-            'SELECT * FROM user WHERE email = ?', (email,)).fetchone()
+        user = db.execute('SELECT * FROM user WHERE email = ?', (email,)).fetchone()
 
         if user:
             flash('Email już istnieje.')

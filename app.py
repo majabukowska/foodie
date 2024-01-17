@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from openai import OpenAI
 import json
-from your_config_file import OPENAI_API_KEY
+from config import OPENAI_API_KEY
 
 
 app = Flask(__name__)

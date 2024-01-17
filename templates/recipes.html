@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<nav class="navbar">
+    <span class="navbar-brand mb-0 h1">foodie</span>
+    <a href="{{ url_for('account') }}" class="btn btn-primary">account</a>
+    <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
+</nav>
+  
+<div>
+    {% for day_plan in diet_plan %}
+        {% for meal_number, meal in day_plan['day'].items() %}
+            <div>
+                <h2>Recipe Title: {{ meal['title'] }}</h2>
+                <p>Calories: {{ meal['calories'] }}</p>
+                <p>Ingredients:</p>
+                <ul>
+                    {% for ingredient, quantity in meal['ingredients'].items() %}
+                        <li>{{ ingredient }}: {{ quantity }}</li>
+                    {% endfor %}
+                </ul>
+                <p>Preparation: {{ meal['preparation'] }}</p>
+                <p>Macros:</p>
+                <ul>
+                    {% for macro, value in meal['macros'].items() %}
+                        <li>{{ macro }}: {{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <div>
+        <label for="planName">Name your diet plan:</label>
+        <input type="text" id="planName" name="planName">
+    
+        <button onclick="saveDietPlan()" class="btn btn-secondary">save diet plan</button>
+        <button onclick="downloadDietPlan()" class="btn btn-primary">download diet plan</button>
+    </div>
+
+    <script>
+        function saveDietPlan() {
+            const planName = document.getElementById('planName').value || 'diet';
+            fetch("{{ url_for('save_diet_plan') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: planName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.success);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    
+        function downloadDietPlan() {
+            const planName = document.getElementById('planName').value || 'diet';
+            window.location.href = "{{ url_for('download_diet_plan', name='') }}/" + planName;
+        }
+    </script>
+    
+{% endblock %}

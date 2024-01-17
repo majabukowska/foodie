@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav class="navbar">
+    <span class="navbar-brand mb-0 h1">foodie</span>
+    <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
+  </nav>
+
+<div class="container">
+    <h1>account</h1>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-info">generate a recipe</a>
+    <a href="{{ url_for('account_settings') }}" class="btn btn-info">account settings</a>
+    
+    <h2>saved recipes:</h2>
+    <table id="recipes-table">
+        <thead>
+            <tr>
+                <th>recipe number</th>
+                <th>name</th>
+                <th>action</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchRecipes();
+    });
+    
+    function fetchRecipes() {
+        fetch('{{ url_for("get_recipes") }}')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('recipes-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; 
+            data.forEach((recipe, index) => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${recipe.name}</td>
+                    <td><button onclick="deleteRecipe(${recipe.id})">🗑️</button></td>
+                `;
+            });
+        });
+    }
+    
+    function deleteRecipe(recipeId) {
+    fetch(`{{ url_for('delete_recipe', id=0) }}`.replace('0', recipeId), {
+        method: 'POST'
+    })
+    .then(response => {
+        if (response.ok) {
+            fetchRecipes();
+        } else {
+            alert('Error deleting recipe');
+        }
+    });
+}
+
+    </script>
+  {% endblock %}

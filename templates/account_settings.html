@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav class="navbar">
+  <span class="navbar-brand mb-0 h1">foodie</span>
+  <a href="{{ url_for('account') }}" class="btn btn-primary">account</a>
+  <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
+</nav>
+
+<div class="container">
+  <h1>account settings</h1>
+</div>
+{% endblock %}

@@ -1,11 +1,13 @@
 {
-    "name": "Flask PWA Example",
-    "short_name": "Flask PWA",
-    "description": "A simple Flask Progressive Web App example",
-    "start_url": "/",
+    "name": "foodie",
+    "short_name": "foodie",
+    "description": "foodie",
+    "theme_color": "transparent",
+    "background_color": "transparent",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#000000",
+    "orientation": "portrait",
+    "scope": "/",
+    "start_url": "/",
     "icons": [
         {
             "src": "/static/icon.png",

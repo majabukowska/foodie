@@ -1,0 +1,20 @@
+{
+    "name": "foodie",
+    "repository": "https://github.com/majabukowska/foodie",
+    "env": {
+        "SECRET_KEY": {
+            "description": "Secret key for Flask.",
+            "value": "foodie"
+        },
+        "FLASK_ENV": {
+            "description": "Environment for Flask",
+            "value": "production"
+        }
+    },
+    "formation": {
+        "web": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
+}

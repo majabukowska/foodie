@@ -47,13 +47,11 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
-    <script>
-      if (typeof navigator.serviceWorker !== 'undefined') {
-        navigator.serviceWorker.register('pwabuilder-sw.js')
-      }
-    </script>
+
   </head>
   <body>
     {% block content %} {% endblock %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+
   </body>
 </html>

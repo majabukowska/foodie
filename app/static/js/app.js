@@ -43,4 +43,3 @@
   window.addEventListener('appinstalled', (evt) => {
     app.logEvent('app', 'installed');
   });
-  

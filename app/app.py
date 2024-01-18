@@ -12,7 +12,7 @@ app.config['SECRET_KEY'] = 'foodie'
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
-cred = credentials.Certificate('../foodie-0805-firebase-adminsdk-uwv61-c5a7f5af1e.json')
+cred = credentials.Certificate('foodie-0805-firebase-adminsdk-uwv61-c5a7f5af1e.json')
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()

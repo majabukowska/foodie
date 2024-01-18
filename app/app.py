@@ -7,6 +7,7 @@ import json
 from firebase_admin import credentials, firestore, initialize_app
 import base64
 import  firebase_admin
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'foodie'
 client = OpenAI(
@@ -43,7 +44,6 @@ def load_user(user_id):
         return User(id=user_id, name=user_data['name'], email=user_data['email'], password=user_data['password'])
     return None
 
-
 @app.route('/manifest.json')
 def manifest():
     return send_from_directory('static', 'manifest.json')
@@ -58,10 +58,10 @@ def service_worker():
 
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('index.html')
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email']

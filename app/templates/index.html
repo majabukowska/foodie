@@ -1,0 +1,19 @@
+{% extends "base.html" %} {% block content %}
+<nav class="navbar">
+  <span class="navbar-brand mb-0 h1">foodie</span>
+</nav>
+
+<form class="signUpForm" method="post" action="{{ url_for('login') }}">
+  <h1>welcome to foodie</h1>
+  <h3>please sign in or login:</h3>
+  <div class="form-group">
+
+    <small id="emailHelp" class="form-text">
+        already on foodie? <a href="/login">log in here</a>
+      </small>
+  <small id="emailHelp" class="form-text">
+    new on foodie? <a href="/signup">sign up here</a>
+  </small>
+</form>
+
+{% endblock %}

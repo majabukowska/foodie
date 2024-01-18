@@ -2,3 +2,4 @@ flask==3.0.0
 Flask-SQLAlchemy==3.1.1
 Flask-Login==0.6.3
 openai==1.7.0
+firebase-admin==6.3.0

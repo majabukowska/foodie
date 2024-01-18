@@ -1,45 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session, make_response
-import sqlite3
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from openai import OpenAI
 import json
-
+import firebase_admin
+from firebase_admin import credentials, firestore
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'foodie'
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
-DATABASE = 'database.db'
+cred = credentials.Certificate('../foodie-0805-firebase-adminsdk-uwv61-c5a7f5af1e.json')
+firebase_admin.initialize_app(cred)
 
-
-def get_db():
-    db = sqlite3.connect(DATABASE)
-    db.row_factory = sqlite3.Row
-    return db
-
-
-def create_table():
-    db = get_db()
-    db.execute('''
-        CREATE TABLE IF NOT EXISTS user (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL UNIQUE,
-            password TEXT NOT NULL)
-    ''')
-    db.execute('''
-        CREATE TABLE IF NOT EXISTS diet_plan (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            name TEXT NOT NULL,
-            plan TEXT NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES user(id))
-    ''')
-    db.commit()
-
+db = firestore.client()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -56,12 +32,12 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    db = get_db()
-    user = db.execute('SELECT * FROM user WHERE id = ?', (user_id,)).fetchone()
-    if user:
-        return User(id=user['id'], name=user['name'], email=user['email'], password=user['password'])
+    user_ref = db.collection('users').document(user_id)
+    user = user_ref.get()
+    if user.exists:
+        user_data = user.to_dict()
+        return User(id=user_id, name=user_data['name'], email=user_data['email'], password=user_data['password'])
     return None
-
 
 @app.route('/')
 def index():
@@ -74,18 +50,20 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        db = get_db()
-        user = db.execute('SELECT * FROM user WHERE email = ?', (email,)).fetchone()
+        user_ref = db.collection('users').document(email)
+        user = user_ref.get()
 
-        if user is None or not check_password_hash(user['password'], password):
+        if not user.exists or not check_password_hash(user.to_dict()['password'], password):
             flash('Sprawdź swoje dane logowania i spróbuj ponownie.')
             return redirect(url_for('login'))
 
-        user_obj = User(id=user['id'], name=user['name'], email=user['email'], password=user['password'])
+        user_data = user.to_dict()
+        user_obj = User(id=user.id, name=user_data['name'], email=user_data['email'], password=user_data['password'])
         login_user(user_obj)
         return redirect(url_for('dashboard'))
 
     return render_template('login.html')
+
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -95,20 +73,23 @@ def signup():
         email = request.form['email']
         password = request.form['password']
 
-        db = get_db()
-        user = db.execute('SELECT * FROM user WHERE email = ?', (email,)).fetchone()
+        user_ref = db.collection('users').document(email)
+        user = user_ref.get()
 
-        if user:
+        if user.exists:
             flash('Email już istnieje.')
             return redirect(url_for('signup'))
 
-        db.execute('INSERT INTO user (name, email, password) VALUES (?, ?, ?)',
-                   (name, email, generate_password_hash(password)))
-        db.commit()
+        user_ref.set({
+            'name': name,
+            'email': email,
+            'password': generate_password_hash(password)
+        })
 
         return redirect(url_for('login'))
 
     return render_template('signup.html')
+
 
 
 @app.route('/logout')
@@ -232,10 +213,10 @@ def save_diet_plan():
             diet_plan_text += f"{meal['preparation']}\n\n"
 
 
-    db = get_db()
-    db.execute('INSERT INTO diet_plan (user_id, name, plan) VALUES (?, ?, ?)', 
-               (user_id, plan_name, diet_plan_text))
-    db.commit()
+    diet_plan_ref = db.collection('users').document(user_id).collection('diet_plans').document(plan_name)
+    diet_plan_ref.set({
+        'plan': diet_plan
+    })
 
     return jsonify({'success': 'Diet plan saved successfully'})
 
@@ -244,18 +225,17 @@ def save_diet_plan():
 @login_required
 def get_recipes():
     user_id = current_user.id
-    db = get_db()
-    recipes = db.execute('SELECT id, name FROM diet_plan WHERE user_id = ?', (user_id,)).fetchall()
-    return jsonify([{"id": recipe['id'], "name": recipe['name']} for recipe in recipes])
+    diet_plans = db.collection('users').document(user_id).collection('diet_plans').stream()
+
+    recipes = [{"id": diet_plan.id, "name": diet_plan.id} for diet_plan in diet_plans]
+    return jsonify(recipes)
 
 
 @app.route('/delete-recipe/<int:id>', methods=['POST'])
 @login_required
 def delete_recipe(id):
     user_id = current_user.id
-    db = get_db()
-    db.execute('DELETE FROM diet_plan WHERE id = ? AND user_id = ?', (id, user_id))
-    db.commit()
+    db.collection('users').document(user_id).collection('diet_plans').document(str(id)).delete()
     return jsonify({'success': True})
 
 
@@ -269,10 +249,6 @@ def account():
 @login_required
 def account_settings():
     return render_template('account_settings.html')
-
-
-with app.app_context():
-    create_table()
 
 
 if __name__ == '__main__':

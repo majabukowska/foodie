@@ -1,7 +1,6 @@
 config.py
 venv/
-firebase_config.json
-
+foodie-0805-firebase-adminsdk-uwv61-c5a7f5af1e.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -4,16 +4,20 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from openai import OpenAI
 import json
-import firebase_admin
-from firebase_admin import credentials, firestore
-
+from firebase_admin import credentials, firestore, initialize_app
+import base64
+import  firebase_admin
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'foodie'
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
-cred = credentials.Certificate('foodie-0805-firebase-adminsdk-uwv61-c5a7f5af1e.json')
-firebase_admin.initialize_app(cred)
+encoded_creds = os.getenv('FIREBASE_CREDENTIALS_BASE64')
+
+decoded_creds = base64.b64decode(encoded_creds)
+
+cred = credentials.Certificate(json.loads(decoded_creds))
+initialize_app(cred)
 
 db = firestore.client()
 

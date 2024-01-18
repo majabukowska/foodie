@@ -6,7 +6,6 @@ from openai import OpenAI
 import json
 from firebase_admin import credentials, firestore, initialize_app
 import base64
-import  firebase_admin
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'foodie'
@@ -55,11 +54,10 @@ def service_worker():
     response.headers['Cache-Control'] = 'no-cache'
     return response
 
-
 @app.route('/')
 def index():
+    print("Index page is called")
     return render_template('index.html')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

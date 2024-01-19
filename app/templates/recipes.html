@@ -31,31 +31,39 @@
         {% endfor %}
     {% endfor %}
     <div>
-        <label for="planName">Name your diet plan:</label>
+        <label for="planName">name your diet plan:</label>
         <input type="text" id="planName" name="planName">
     
         <button onclick="saveDietPlan()" class="btn btn-secondary">save diet plan</button>
         <button onclick="downloadDietPlan()" class="btn btn-primary">download diet plan</button>
     </div>
+    <div id="message" style="color: red;"></div>
 
     <script>
-        function saveDietPlan() {
-            const planName = document.getElementById('planName').value || 'diet';
-            fetch("{{ url_for('save_diet_plan') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name: planName })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.success);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+function saveDietPlan() {
+    const planName = document.getElementById('planName').value;
+    fetch("{{ url_for('save_diet_plan') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: planName })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(data => Promise.reject(data));
         }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('message').innerText = data.success;
+    })
+    .catch(error => {
+        document.getElementById('message').innerText = error.error || 'an unexpected error occurred';
+        console.error('error:', error);
+    });
+}
+
     
         function downloadDietPlan() {
             const planName = document.getElementById('planName').value || 'diet';

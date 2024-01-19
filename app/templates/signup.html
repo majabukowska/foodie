@@ -2,7 +2,17 @@
 <nav class="navbar">
   <span class="navbar-brand mb-0 h1">foodie</span>
 </nav>
-
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="container">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 <form class="signUpForm" method="post" action="{{ url_for('signup') }}">
   <h1>welcome to foodie</h1>
   <h3>please sign up to continue:</h3>

@@ -8,11 +8,13 @@
 </nav>
 
 <div class="container">
+  <div id="message-container" class="container"></div>
+
   <div class="loading-message" style="display: none;">generating...</div>
 
 
   <form id="params-form">
-    <h5 class="card-title">choose params</h5>
+    <h5 class="card-title">choose correct parameters:</h5>
   <div class="mb-3">
     <input type="text" class="form-control" id="ingredients" placeholder="Type your ingredients">
   </div>
@@ -89,15 +91,22 @@
       setupButtonGroup('.meals-btn');
       setupButtonGroup('.calories-btn');
     
-      document.querySelector('#generate-btn').addEventListener('click', function() {
-        document.querySelector('.loading-message').style.display = 'block';
+        document.querySelector('#generate-btn').addEventListener('click', function() {
+          document.getElementById('error-message').innerText = '';
+
+  let ingredients = document.querySelector('#ingredients').value.trim();
+  let selectedDay = document.querySelector('.days-btn.active')?.getAttribute('value');
+  let selectedMeal = document.querySelector('.meals-btn.active')?.getAttribute('value');
+  let selectedCalories = document.querySelector('.calories-btn.active')?.getAttribute('value');
+  let dietaryRequirements = Array.from(document.querySelectorAll('.form-check-input:checked')).map(el => el.value);
+
+  if (!ingredients || !selectedDay || !selectedMeal || !selectedCalories) {
+    document.getElementById('error-message').innerText = 'Please fill all required fields';
+    return;
+  }
+
+  document.querySelector('.loading-message').style.display = 'block';
         document.querySelector('#params-form').style.display = 'none';
-        let ingredients = document.querySelector('#ingredients').value;
-        let selectedDay = document.querySelector('.days-btn.active')?.getAttribute('value') || '1d';
-        let selectedMeal = document.querySelector('.meals-btn.active')?.getAttribute('value') || '3m';
-        let selectedCalories = document.querySelector('.calories-btn.active')?.getAttribute('value') || '2000';
-        let dietaryRequirements = Array.from(document.querySelectorAll('.form-check-input:checked')).map(el => el.value);
-            
         fetch('/generate', {
           method: 'POST',
           headers: {
@@ -113,25 +122,26 @@
           }),
         })
         .then(response => {
-          console.log('Received response');
-          return response.json();
-        })
-        .then(data => {
-          console.log('Data:', data);
-          if (data.success) {
-            window.location.href = '/recipes';
-          } else {
-            document.querySelector('.loading-message').style.display = 'none';
-            document.querySelector('#params-form').style.display = 'block';
-            alert('Failed to generate recipes');          }
-        })
-        .catch(error => {
-          console.error('Fetch error:', error);
-          document.querySelector('.loading-message').style.display = 'none';
-          document.querySelector('#params-form').style.display = 'block';
-        });
-      });
+      if (!response.ok) {
+        throw new Error('network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.success) {
+        window.location.href = '/recipes';
+      } else {
+        throw new Error('data response was not successful');
+      }
+    })
+    .catch(error => {
+      console.error('fetch error:', error);
+      document.querySelector('.loading-message').style.display = 'none';
+      document.querySelector('#params-form').style.display = 'block';
+      document.getElementById('error-message').innerText = 'something went wrong, please try again';
     });
+  });
+});
     </script>
     
     

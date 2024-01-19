@@ -6,8 +6,34 @@
   <a href="{{ url_for('account') }}" class="btn btn-primary">account</a>
   <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
 </nav>
-
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="container">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 <div class="container">
   <h1>account settings</h1>
+  <form action="{{ url_for('update_account') }}" method="post">
+    <div class="form-group">
+      <label for="name">new name:</label>
+      <input type="text" class="form-control" id="name" name="name">
+    </div>
+    <div class="form-group">
+      <label for="email">new email:</label>
+      <input type="email" class="form-control" id="email" name="email">
+    </div>
+    <div class="form-group">
+      <label for="password">new password:</label>
+      <input type="password" class="form-control" id="password" name="password">
+    </div>
+    <button type="submit" class="btn btn-primary">update</button>
+  </form>
 </div>
+
 {% endblock %}

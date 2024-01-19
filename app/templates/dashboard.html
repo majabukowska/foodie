@@ -3,34 +3,37 @@
 {% block content %}
 <nav class="navbar">
   <span class="navbar-brand mb-0 h1">foodie</span>
-  <a href="{{ url_for('account') }}" class="btn btn-primary">account</a>
-  <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
+  <div class="nav-buttons">
+    <a href="{{ url_for('account') }}" class="btn btn-primary">account</a>
+    <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
+  </div>
 </nav>
+
 
 <div class="container">
   <div id="message-container" class="container"></div>
-
+  <div id="error-message" class="alert alert-danger" style="display: none;"></div>
   <div class="loading-message" style="display: none;">generating...</div>
 
-
+  <div class="sd">
   <form id="params-form">
     <h5 class="card-title">choose correct parameters:</h5>
-  <div class="mb-3">
+  <div>
     <input type="text" class="form-control" id="ingredients" placeholder="Type your ingredients">
   </div>
-
-  <p class="title">days</p>
+<div>
+  <p class="title">days:</p>
   <div class="btn-group mb-3" role="group">
 
-            <button type="button" class="btn btn-outline-secondary days-btn" value="1">1 day</button>
-            <button type="button" class="btn btn-outline-secondary days-btn" value="2">2 days</button>
-            <button type="button" class="btn btn-outline-secondary days-btn" value="3">3 days</button>
-            <button type="button" class="btn btn-outline-secondary days-btn" value="4">4 days</button>
-            <button type="button" class="btn btn-outline-secondary days-btn" value="5">5 days</button>
-            <button type="button" class="btn btn-outline-secondary days-btn" value="6">6 days</button>
-            <button type="button" class="btn btn-outline-secondary days-btn" value="7">7 days</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="1">1</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="2">2</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="3">3</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="4">4</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="5">5</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="6">6</button>
+            <button type="button" class="btn btn-outline-secondary days-btn" value="7">7</button>
           </div>
-          
+          </div>
           <p class="title">meals</p>
           <div class="btn-group mb-3" role="group">
             <button type="button" class="btn btn-outline-secondary meals-btn" value="3">3 meals</button>
@@ -50,16 +53,20 @@
           </div>
           
           <p class="title">dietary requirements</p>
-          <div class="mb-3">
+          <div>
             <div class="form-check">
+              <div>
               <input class="form-check-input" type="checkbox" value="vegetarian" id="vegetarian">
-              <label class="form-check-label" for="vegetarian">vegetarian</label>
+              <label class="form-check-label" for="vegetarian">vegetarian</label></div>
+              <div>
               <input class="form-check-input" type="checkbox" value="vegan" id="vegan">
-              <label class="form-check-label" for="vegan">vegan</label>
+              <label class="form-check-label" for="vegan">vegan</label></div>
+              <div>
               <input class="form-check-input" type="checkbox" value="gluten-free" id="gluten-free">
-              <label class="form-check-label" for="gluten-free">gluten-free</label>
+              <label class="form-check-label" for="gluten-free">gluten-free</label></div>
+              <div>
               <input class="form-check-input" type="checkbox" value="dairy-free" id="dairy-free">
-              <label class="form-check-label" for="dairy-free">dairy-free</label>
+              <label class="form-check-label" for="dairy-free">dairy-free</label></div>
             </div>
             
           </div>
@@ -70,6 +77,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -92,7 +100,9 @@
       setupButtonGroup('.calories-btn');
     
         document.querySelector('#generate-btn').addEventListener('click', function() {
-          document.getElementById('error-message').innerText = '';
+          let errorMessage = document.getElementById('error-message');
+    errorMessage.innerText = '';
+    errorMessage.style.display = 'none'; 
 
   let ingredients = document.querySelector('#ingredients').value.trim();
   let selectedDay = document.querySelector('.days-btn.active')?.getAttribute('value');
@@ -102,9 +112,9 @@
 
   if (!ingredients || !selectedDay || !selectedMeal || !selectedCalories) {
     document.getElementById('error-message').innerText = 'Please fill all required fields';
+    document.getElementById('error-message').style.display = 'block';
     return;
-  }
-
+}
   document.querySelector('.loading-message').style.display = 'block';
         document.querySelector('#params-form').style.display = 'none';
         fetch('/generate', {
@@ -122,24 +132,30 @@
           }),
         })
         .then(response => {
-      if (!response.ok) {
+    if (!response.ok) {
         throw new Error('network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (data.success) {
+    }
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+        return response.json();
+    } else {
+        return response.text().then(text => { throw new Error(text) });
+    }
+})
+.then(data => {
+    if (data.success) {
         window.location.href = '/recipes';
-      } else {
+    } else {
         throw new Error('data response was not successful');
-      }
-    })
-    .catch(error => {
-      console.error('fetch error:', error);
-      document.querySelector('.loading-message').style.display = 'none';
-      document.querySelector('#params-form').style.display = 'block';
-      document.getElementById('error-message').innerText = 'something went wrong, please try again';
-    });
+    }
+})
+.catch(error => {
+    console.error('fetch error:', error.message);
+    document.querySelector('.loading-message').style.display = 'none';
+    document.querySelector('#params-form').style.display = 'block';
+    document.getElementById('error-message').innerText = 'something went wrong, please try again';
+    document.getElementById('error-message').style.display = 'block';
+});
   });
 });
     </script>

@@ -7,6 +7,7 @@ nav.navbar {
     background-color: #745296;
     color: #E8AEB7;
     width: 100%;
+    padding-right: 0;
 }
 
 .signUpForm {
@@ -45,34 +46,163 @@ h3{
 }
 button.btn {
     background-color: #0A2463;
-    border: 1px solid #0A2463;
+    border: 0;
 }
 
 button.btn:hover,
 button.btn:active {
     background-color: #97D2FB !important;
-    border: 1px solid #97D2FB !important;
-    box-shadow: 0 0 2px 3px white !important;
+
 }
 
 .container {
     display: flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
-
+    justify-content: center; 
+    align-items: center;
+    width: 100%; 
+    height: 100%; 
 }
 
-.btn-primary {
-    background-color: #0A2463;
-    border: 1px solid #0A2463;
+.btn-info{
+    margin-bottom: 10px;
+width: 15%;
 }
 
+.nav-buttons{
+    display: flex;
+    flex-direction: row;
+    right: 0px;
+}
+
+.btn-primary{
+    margin-right: 15px;
+    border: 0px;
+    box-shadow: unset !important;
+
+}
 .btn-primary:hover,
 .btn-primary:active {
     background-color: #97D2FB !important;
-    border: 1px solid #97D2FB !important;
-    box-shadow: 0 0 2px 3px white !important;
+    border: none;
+    box-shadow: unset !important;
+}
+.btn {
+    background: #0A2463 !important;
 }
 
+.sd {
+    padding: 1.5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: auto; 
+    margin-top: 4vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+text-align: center; 
+width: 80%;
+height: 85%;
+    background: #745296;
+    border-radius: 2%;
+    box-shadow: 5px 5px white;
+}
+
+.form-control{
+    margin-top: 5vh;
+    width: 100%;
+    display: unset;
+}
+
+.form-check {
+    margin-left: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+.form-check-label {
+    margin-left: 10px; 
+    color: white;
+}
+
+
+
+.btn-success{
+    margin-top: 2vh;
+    box-shadow:none !important;
+
+}
+
+.btn-success:hover,
+.btn-success:active {
+    background-color: #97D2FB !important;
+    border: none;
+    box-shadow:none !important;
+
+}
+
+.btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .6vh;
+}
+
+.btn-outline-secondary {
+    font-size: 1.5vh;
+    font-weight: 500;
+    border-radius: 7% !important;
+
+}
+
+.title{
+    margin-bottom: 1vh;
+    margin-top: 2vh;
+    font-size: 1.5vh;
+    color: #E8AEB7;
+    font-weight: bold;
+
+}
+
+.card-title{
+    font-weight: bold;
+    color: #E8AEB7;
+    position: absolute;
+    top: 0; 
+    left: 50%;
+    transform: translateX(-50%); 
+    width: 100%; 
+    margin-top: 2vh;
+}
+
+
+.meals-btn,
+.calories-btn,
+.days-btn{
+    color: white;
+}
+
+.btn-outline-secondary {
+    height: 40px; 
+    padding: 0.5em 1em; 
+    box-sizing: border-box; 
+}
+
+
+    .btn-outline-secondary:focus {
+        outline: none;
+        box-shadow: none;
+    }
+    
+   .active{
+    border: unset !important;
+    box-shadow: none !important;
+    padding: 14 !important;
+    border-radius: 7% !important;
+    background: #97D2FB !important;
+
+   }

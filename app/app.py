@@ -95,7 +95,7 @@ def login():
         user_data = user.to_dict()
         user_obj = User(id=user.id, name=user_data['name'], email=user_data['email'], password=user_data['password'])
         login_user(user_obj)
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('account'))
 
     return render_template('login.html')
 

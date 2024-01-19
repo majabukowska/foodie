@@ -5,24 +5,24 @@
     <span class="navbar-brand mb-0 h1">foodie</span>
     <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
   </nav>
-  <div class="message-container" style="display:none;"></div>
+  <div class="message-container alert alert-warning" style="display:none; background: none;"></div>
 
 <div class="container">
     <h1>account</h1>
     <a href="{{ url_for('account_settings') }}" class="btn btn-info">account settings</a>
 
-    <a href="{{ url_for('dashboard') }}" class="btn btn-info">generate a recipe</a>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-info ">generate recipe</a>
     
     <h2>saved recipes:</h2>
     <table id="recipes-table">
       <thead>
         <tr>
-            <th>recipe number</th>
+            <th>number</th>
             <th>name</th>
             <th>actions</th>
         </tr>
     </thead>
-        <tbody>
+        <tbody class="tbody">
         </tbody>
     </table>
 </div>
@@ -51,9 +51,9 @@ function displayMessage(message, type) {
     messageContainer.style.display = 'block';
     messageContainer.textContent = message;
     if (type === "success") {
-        messageContainer.style.backgroundColor = "lightgreen";
+        messageContainer.style.backgroundColor = "pin";
     } else {
-        messageContainer.style.backgroundColor = "salmon";
+        messageContainer.style.backgroundColor = "pink";
     }
 }
 
@@ -68,9 +68,10 @@ function displayMessage(message, type) {
                 row.innerHTML = `
                 <td>${index + 1}</td>
                 <td>${recipe.name}</td>
-                <td>
-                    <button onclick="deleteRecipe('${recipe.id}')">delete</button>
-                    <button onclick="downloadRecipe('${recipe.id}', '${recipe.name}')">download</button>
+                <td style="text-align:"center;">
+                    <button onclick="deleteRecipe('${recipe.id}')" style="border: none; background: transparent; padding: 0; margin: 3px;"><i class="fa fa-trash-o"></i></button>
+</button>
+<button onclick="downloadRecipe('${recipe.id}', '${recipe.name}')" style="border: none; background: transparent; padding: 0; margin: 3px;"><i class="fa fa-download"></i></button>
                 </td>
                 `;
             });

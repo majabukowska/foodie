@@ -4,15 +4,18 @@
 
 <nav class="navbar">
     <span class="navbar-brand mb-0 h1">foodie</span>
-    <a href="{{ url_for('account') }}" class="btn btn-primary">account</a>
-    <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
-</nav>
-  
-<div>
+    <div class="nav-buttons">
+      <a href="{{ url_for('account') }}" class="btn btn-primary">account</a>
+      <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
+    </div>
+  </nav>
+
+<div class="recipes">
+    <div class="recipes_text">
     {% for day_plan in diet_plan %}
         {% for meal_number, meal in day_plan['day'].items() %}
             <div>
-                <h2>Recipe Title: {{ meal['title'] }}</h2>
+                <h4>Recipe Title: {{ meal['title'] }}</h4>
                 <p>Calories: {{ meal['calories'] }}</p>
                 <p>Ingredients:</p>
                 <ul>
@@ -29,15 +32,19 @@
                 </ul>
             </div>
         {% endfor %}
-    {% endfor %}
+    {% endfor %}</div>
     <div>
-        <label for="planName">name your diet plan:</label>
-        <input type="text" id="planName" name="planName">
-    
-        <button onclick="saveDietPlan()" class="btn btn-secondary">save diet plan</button>
-        <button onclick="downloadDietPlan()" class="btn btn-primary">download diet plan</button>
+        
+        <div id="message" class="alert alert-warning"></div>
+        <div class="recipe_bottom">
+        <label for="planName"></label>
+        <input type="text" id="planName" name="planName" placeholder="name your diet plan">
+        <div class="recipe_buttons">
+        <button onclick="saveDietPlan()" class="btn btn-secondary">save</button>
+        <button onclick="downloadDietPlan()" class="btn btn-primary">download</button>
     </div>
-    <div id="message" style="color: red;"></div>
+</div>
+    </div>
 
     <script>
 function saveDietPlan() {

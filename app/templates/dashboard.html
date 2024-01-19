@@ -8,17 +8,18 @@
     <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
   </div>
 </nav>
-
-
 <div class="container">
+
   <div id="message-container" class="container"></div>
-  <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-  <div class="loading-message" style="display: none;">generating...</div>
+  <div id="error-message" class="alert alert-warning" style="display: none;"></div>
+
 
   <div class="sd">
+      <div class="loading-message" style="display: none;">generating...</div>
+
   <form id="params-form">
     <h5 class="card-title">choose correct parameters:</h5>
-  <div>
+  <div class="a">
     <input type="text" class="form-control" id="ingredients" placeholder="Type your ingredients">
   </div>
 <div>

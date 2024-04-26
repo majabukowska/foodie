@@ -201,8 +201,6 @@ def show_recipes():
     return render_template('recipes.html', diet_plan=diet_plan_display)
 
 
-
-
 @app.route('/download-diet-plan/<name>')
 @login_required
 def download_diet_plan(name):
@@ -326,12 +324,44 @@ def delete_recipe(recipe_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+@app.route('/download-ingredient-list/<name>')
+@login_required
+def download_ingredient_list(name):
+    diet_plan_download = session.get('diet_plan_download', [])
+
+    if not diet_plan_download:
+        return "no diet plan available for download", 404
+
+    diet_plan = [json.loads(plan) for plan in diet_plan_download]
+
+    shopping_list_text = generate_shopping_list_text(diet_plan)
+
+    response = make_response(shopping_list_text)
+    response.headers["Content-Disposition"] = f"attachment; filename={name}_ingredients.txt"
+    response.headers["Content-type"] = "text/plain"
+    return response
+def generate_shopping_list_text(diet_plan):
+    shopping_list_text = ""
+
+    for day_plan in diet_plan:
+        for meal_number, meal in day_plan['day'].items():
+            shopping_list_text += f"Meal {meal_number[-1]}:\n"  # meal_number[-1] wyciąga numer posiłku z klucza 'meal1', 'meal2', itp.
+            for ingredient, quantity in meal['ingredients'].items():
+                shopping_list_text += f"{ingredient}: {quantity},\n"
+            shopping_list_text += "\n"  # Dodaj pustą linię po każdym posiłku
+
+    return shopping_list_text
     
 @app.route('/account')
 @login_required
 def account():
     return render_template('account.html')
 
+@app.route('/links')
+@login_required
+def links():
+    return render_template('links.html')
 
 @app.route('/account-settings')
 @login_required

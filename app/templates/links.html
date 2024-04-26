@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav class="navbar">
+    <span class="navbar-brand mb-0 h1">foodie</span>
+    <div class="nav-buttons">
+        <a href="{{ url_for('account') }}" class="btn btn-primary">account</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-primary">log out</a>
+      </div>
+  </nav>
+  <div class="message-container alert alert-warning" style="display:none; background: none;"></div>
+
+<div class="container">
+    <h1>additional links</h1>
+    <a href="https://www.calculator.net/calorie-calculator.html" class="btn btn-info">calorie calculator</a>
+
+    <a href="https://www.fitatu.com" class="btn btn-info ">fitatu</a>
+    
+    <a href="https://www.bbcgoodfood.com/recipes/collection/low-calorie-meal-recipes" class="btn btn-info ">low calorie meals</a>
+
+    <a href="https://www.bbcgoodfood.com/recipes/collection/high-calorie-recipes" class="btn btn-info ">high calorie meals</a>
+
+
+</div>
+  {% endblock %}

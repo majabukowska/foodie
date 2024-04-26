@@ -346,10 +346,10 @@ def generate_shopping_list_text(diet_plan):
 
     for day_plan in diet_plan:
         for meal_number, meal in day_plan['day'].items():
-            shopping_list_text += f"Meal {meal_number[-1]}:\n"  # meal_number[-1] wyciąga numer posiłku z klucza 'meal1', 'meal2', itp.
+            shopping_list_text += f"Meal {meal_number[-1]}:\n"
             for ingredient, quantity in meal['ingredients'].items():
                 shopping_list_text += f"{ingredient}: {quantity},\n"
-            shopping_list_text += "\n"  # Dodaj pustą linię po każdym posiłku
+            shopping_list_text += "\n"  
 
     return shopping_list_text
     
